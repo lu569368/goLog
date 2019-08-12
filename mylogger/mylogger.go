@@ -8,8 +8,17 @@ import (
 	"strings"
 )
 
-//LogLevel 66666
+//LogLevel 自定义一个日志库
 type LogLevel uint16
+
+// Logger 接口
+type Logger interface {
+	Debug(format string, a ...interface{})
+	Info(format string, a ...interface{})
+	Warning(format string, a ...interface{})
+	Error(format string, a ...interface{})
+	Fatal(format string, a ...interface{})
+}
 
 const (
 	//UNKNOWN ...
@@ -22,7 +31,7 @@ const (
 	INFO
 	//WARNING ...
 	WARNING
-	//ERROR ...
+	//ERROR 。。。
 	ERROR
 	//FATAL ...
 	FATAL
@@ -44,32 +53,33 @@ func parseLogLevel(s string) (LogLevel, error) {
 	case "fatal":
 		return FATAL, nil
 	default:
-		err := errors.New("无效的日志类别")
+		err := errors.New("无效的日志级别")
 		return UNKNOWN, err
 	}
 }
+
 func getLogString(lv LogLevel) string {
 	switch lv {
 	case DEBUG:
-		return "debug"
+		return "DEBUG"
 	case TRACE:
-		return "trace"
+		return "TRACE"
 	case INFO:
-		return "info"
+		return "INFO"
 	case WARNING:
-		return "warning"
+		return "WARNING"
 	case ERROR:
-		return "error"
+		return "ERROR"
 	case FATAL:
-		return "fatal"
-	default:
-		return "debug"
+		return "FATAL"
 	}
+	return "DEBUG"
 }
-func getInfo(skg int) (funcName, fileName string, lineNo int) {
-	pc, file, lineNo, ok := runtime.Caller(skg)
+
+func getInfo(skip int) (funcName, fileName string, lineNo int) {
+	pc, file, lineNo, ok := runtime.Caller(skip)
 	if !ok {
-		fmt.Println(" runtime.Caller()函数运行错误")
+		fmt.Printf("runtime.Caller() failed\n")
 		return
 	}
 	funcName = runtime.FuncForPC(pc).Name()

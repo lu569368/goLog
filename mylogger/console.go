@@ -5,70 +5,58 @@ import (
 	"time"
 )
 
-//Logger ....
-type Logger struct {
+// 往终端写日志相关内容
+
+// ConsoleLogger ... Logger 日志结构体
+type ConsoleLogger struct {
 	Level LogLevel
 }
 
-//NewLoger .....
-func NewLoger(levelStr string) Logger {
-	Level, err := parseLogLevel(levelStr)
+//NewConsoleLogger ... NewLog 构造函数
+func NewConsoleLogger(levelStr string) ConsoleLogger {
+	level, err := parseLogLevel(levelStr)
 	if err != nil {
 		panic(err)
 	}
-	return Logger{
-		Level: Level,
+	return ConsoleLogger{
+		Level: level,
 	}
 }
 
-//Enble 判断是否满足写入的需要
-func (l Logger) Enble(LogLevel LogLevel) bool {
-	return LogLevel >= l.Level
+func (c ConsoleLogger) enable(logLevel LogLevel) bool {
+	return logLevel >= c.Level
 }
-func log(lv LogLevel, msg string) {
-	now := time.Now()
-	funcName, fileName, lineNo := getInfo(3)
-	fmt.Printf("[%s] [%s] [%s:%s:%d] %s\n", now.Format("2006-01-02 15:04:05"), getLogString(lv), fileName, funcName, lineNo, msg)
+
+func (c ConsoleLogger) log(lv LogLevel, format string, a ...interface{}) {
+	if c.enable(lv) {
+		msg := fmt.Sprintf(format, a...)
+		now := time.Now()
+		funcName, fileName, lineNo := getInfo(3)
+		fmt.Printf("[%s] [%s] [%s:%s:%d] %s\n", now.Format("2006-01-02 15:04:05"), getLogString(lv), fileName, funcName, lineNo, msg)
+	}
 }
 
 //Debug ...
-func (l Logger) Debug() {
-	if l.Enble(DEBUG) {
-		log(DEBUG, "我是一个debug错误")
-	}
-}
-
-//Trace ..
-func (l Logger) Trace() {
-	if l.Enble(TRACE) {
-		log(TRACE, "我是一个TRACE错误")
-	}
+func (c ConsoleLogger) Debug(format string, a ...interface{}) {
+	c.log(DEBUG, format, a...)
 }
 
 //Info ...
-func (l Logger) Info() {
-	if l.Enble(INFO) {
-		log(INFO, "我是一个INFO错误")
-	}
+func (c ConsoleLogger) Info(format string, a ...interface{}) {
+	c.log(INFO, format, a...)
 }
 
 //Warning ...
-func (l Logger) Warning() {
-	if l.Enble(WARNING) {
-		log(WARNING, "我是一个WARNING错误")
-	}
+func (c ConsoleLogger) Warning(format string, a ...interface{}) {
+	c.log(WARNING, format, a...)
 }
 
 //Error ...
-func (l Logger) Error() {
-	if l.Enble(ERROR) {
-		log(ERROR, "我是一个ERROR错误")
-	}
+func (c ConsoleLogger) Error(format string, a ...interface{}) {
+	c.log(ERROR, format, a...)
 }
 
 //Fatal ...
-func (l Logger) Fatal() {
-	if l.Enble(FATAL) {
-		log(FATAL, "我是一个FATAL错误")
-	}
+func (c ConsoleLogger) Fatal(format string, a ...interface{}) {
+	c.log(FATAL, format, a...)
 }

@@ -7,12 +7,12 @@ import (
 
 // 往终端写日志相关内容
 
-// ConsoleLogger ... Logger 日志结构体
+// ConsoleLogger 日志结构体
 type ConsoleLogger struct {
 	Level LogLevel
 }
 
-//NewConsoleLogger ... NewLog 构造函数
+// NewConsoleLogger 构造函数
 func NewConsoleLogger(levelStr string) ConsoleLogger {
 	level, err := parseLogLevel(levelStr)
 	if err != nil {
@@ -36,27 +36,26 @@ func (c ConsoleLogger) log(lv LogLevel, format string, a ...interface{}) {
 	}
 }
 
-//Debug ...
+// Debug ...
 func (c ConsoleLogger) Debug(format string, a ...interface{}) {
 	c.log(DEBUG, format, a...)
 }
 
-//Info ...
+// Info ...
 func (c ConsoleLogger) Info(format string, a ...interface{}) {
 	c.log(INFO, format, a...)
 }
 
-//Warning ...
+// Warning ...
 func (c ConsoleLogger) Warning(format string, a ...interface{}) {
 	c.log(WARNING, format, a...)
 }
 
-//Error ...
 func (c ConsoleLogger) Error(format string, a ...interface{}) {
 	c.log(ERROR, format, a...)
 }
 
-//Fatal ...
+// Fatal ...
 func (c ConsoleLogger) Fatal(format string, a ...interface{}) {
 	c.log(FATAL, format, a...)
 }

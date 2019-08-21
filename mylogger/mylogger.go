@@ -8,7 +8,8 @@ import (
 	"strings"
 )
 
-//LogLevel 自定义一个日志库
+// 自定义一个日志库
+
 type LogLevel uint16
 
 // Logger 接口
@@ -21,19 +22,13 @@ type Logger interface {
 }
 
 const (
-	//UNKNOWN ...
+	// UNKNOWN ...
 	UNKNOWN LogLevel = iota
-	//DEBUG ...
 	DEBUG
-	//TRACE ...
 	TRACE
-	//INFO ...
 	INFO
-	//WARNING ...
 	WARNING
-	//ERROR 。。。
 	ERROR
-	//FATAL ...
 	FATAL
 )
 
